@@ -9,10 +9,14 @@
     
 </head>
 <body>  
-    <audio class="audio" src="inflicted.mp3" preload="metadata">
-        <p>Alas, your browser doesn't support html5 audio.</p>
-    </audio>
     <div class="chat-wrapper">
+        <audio class="audio" src="inflicted.mp3" preload="metadata">
+            <p>Alas, your browser doesn't support html5 audio.</p>
+        </audio>
+        <div class="popup">
+            <p class="popup-text">ონლაინ კონსულტაციისთვის დააჭირეთ ღილაკს</p>
+            <img class="support-icon" src="../support.png" alt="">
+        </div>
         <div class="unexpanded-chat-window">
             <!-- <div class="title">
                 Chat</div> -->
@@ -24,7 +28,7 @@
                 <p class="header-text">ონლაინ კონსულტაცია</p>
                 <img class="chat-icon" src="../conversation.png" alt="">
                 <div class="toolbar">
-                    <img class="close-icon" src="../close-white.png" alt="">
+                    <img class="close-icon" onclick="closeChat()" src="../close-white.png" alt="">
                     <img class="fold-icon" src="../dash.png" alt="">
                     <img class="voice-icon" src="../voice.png" onclick="turnAudio()" alt="">
                     <img class="fullscreen-icon" src="../expand.png" onclick="sdsda()" alt="">
