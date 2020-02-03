@@ -382,6 +382,13 @@ let content =
 
 (function() {
     //$('body').append(content);
+
+    const startTime = '';
+    const endTime = '';
+    const supportText = '';
+    const chatTitle = '';
+
+
     let chatInfo = {
       messages: [],
       room: undefined,
@@ -437,52 +444,81 @@ let content =
 
     supportPopup = () => {
       setTimeout(() => {
-        $('.popup').addClass('hide');
-        $('.popup').removeClass('show');
+        $('.popup')
+          .addClass('hide');
+        $('.popup')
+          .removeClass('show');
       }, 6000)
     }
     
     play = () => {
-      $('.audio').get(0).play();
+      $('.audio')
+        .get(0)
+        .play();
     }
 
     turnAudio = () => {
       if ($('.voice-icon').attr('src') === '../voice.png') {
-        $('.voice-icon').attr('src', '../no-voice.png')
-        $('.audio').attr('src', '///');
+        $('.voice-icon')
+          .attr('src', '../no-voice.png')
+        $('.audio')
+          .attr('src', '///');
       } else {
-        $('.voice-icon').attr('src', '../voice.png')
-        $('.audio').attr('src', 'inflicted.mp3');
+        $('.voice-icon')
+          .attr('src', '../voice.png')
+        $('.audio')
+          .attr('src', 'inflicted.mp3');
       }
     }
 
     LanguageChange = (language) => {
       if (language === 'GEO') {
-        $('.unext-text').text("ონლაინ <br>კონსულტაცია");
-        $('.header-text').text("ონლაინ კონსულტაცია");
-        $('.login-btn').text("ჩატის დაწყება");
-        $('.error').text("გთხოვთ შეიყვანოთ სახელი");
-        $('.label').text("შეიყვანეთ სახელი");
-        $('.message-input').attr("placeholder", "პასუხი");
-        $('.send-btn').text("გაგზავნა");
+        $('.unext-text')
+          .text("ონლაინ <br>კონსულტაცია");
+        $('.header-text')
+          .text("ონლაინ კონსულტაცია");
+        $('.login-btn')
+          .text("ჩატის დაწყება");
+        $('.error')
+          .text("გთხოვთ შეიყვანოთ სახელი");
+        $('.label')
+          .text("შეიყვანეთ სახელი");
+        $('.message-input')
+          .attr("placeholder", "პასუხი");
+        $('.send-btn')
+          .text("გაგზავნა");
       }
       if (language === 'ENG') {
-        $('.unext-text').text("Online <br>consultation");
-        $('.header-text').text("Online consultation");
-        $('.login-btn').text("Open chat");
-        $('.error').text("Please input name");
-        $('.label').text("Input name");
-        $('.message-input').attr("placeholder", "answer");
-        $('.send-btn').text("Send");
+        $('.unext-text')
+          .text("Online <br>consultation");
+        $('.header-text')
+          .text("Online consultation");
+        $('.login-btn')
+          .text("Open chat");
+        $('.error')
+          .text("Please input name");
+        $('.label')
+          .text("Input name");
+        $('.message-input')
+          .attr("placeholder", "answer");
+        $('.send-btn')
+          .text("Send");
       }
       if (language === 'RUS') {
-        $('.unext-text').text("Онлайн <br>консультация");
-        $('.header-text').text("Онлайн консультация");
-        $('.login-btn').text("Открыть чат");
-        $('.error').text("пожалуйста Введите имя");
-        $('.label').text("Введите имя");
-        $('.message-input').attr("placeholder", "Ответ");
-        $('.send-btn').text("Отправить");
+        $('.unext-text')
+          .text("Онлайн <br>консультация");
+        $('.header-text')
+          .text("Онлайн консультация");
+        $('.login-btn')
+          .text("Открыть чат");
+        $('.error')
+          .text("пожалуйста Введите имя");
+        $('.label')
+          .text("Введите имя");
+        $('.message-input')
+          .attr("placeholder", "Ответ");
+        $('.send-btn')
+          .text("Отправить");
       }
 
       
@@ -506,24 +542,54 @@ let content =
     socketOn = (param) => {
 
       if (param === 'close') {
-        socket.close();
+        socket.close(); 
         return;
       }
 
-      socket = new WebSocket('ws://localhost:8082/')
+      socket = new WebSocket('ws://192.168.102.173:8080/uccx-chat-connectors/olchat/uqIlJ9vFtrtRu4K?firstName=FIRSTNAME&lastName=LASTNAME')
 
       // When a connection is made
-      socket.onopen = function() {
+      socket.onopen = function(event) {
         console.log('Opened connection ');
+        console.log(event);
 
-        // send data to the server
-        var json = JSON.stringify({ message: 'Hello ' });
-        socket.send(json);
       }
 
       socket.onmessage = function(event) {
-        console.log(event.data);
-        ReceivedMessage(event.data.message);
+        console.log("sadasdsa", event.data);
+        if (event.data.type === 'MESSAGE') {
+          ReceivedMessage(event.data.body);
+        }
+        if (event.data.type === 'AGENT_JOINED') {
+          expanded
+            .find('.chat')
+            .removeClass('hide');
+          expanded
+            .find('.chat')
+            .addClass('show');
+          expanded
+            .find('.waiting')
+            .removeClass('show');
+          expanded 
+            .find('.waiting')
+            .addClass('hide');
+        }
+        if (event.data.type === 'AGENT_LEFT') {
+          socket.close();
+        }
+        if (event.data.type === 'TYPING_ON') {
+          $('#typing-indicator')
+            .removeClass('hide')
+          $('#typing-indicator')
+            .addClass('show')
+        }
+        if (event.data.type === 'TYPING_OFF') {
+          $('#typing-indicator')
+            .removeClass('show')
+          $('#typing-indicator')
+            .addClass('hide')
+        }
+        
       }
       
       // A connection could not be made
@@ -539,19 +605,35 @@ let content =
 
     closeChat = () => {
       socketOn('close');
-      expanded.find('.login').removeClass('hide');
-      expanded.find('.chat').removeClass('show');
-      expanded.find('.chat').addClass('hide');
+      expanded
+        .find('.login')
+        .removeClass('hide');
+      expanded
+        .find('.chat')
+        .removeClass('show');
+      expanded
+        .find('.chat')
+        .addClass('hide');
     }
 
     unexpanded.mouseenter(() => {
-      $('.popup').removeClass('show');
-      $('.popup').addClass('hide');
-      unexpanded.find('.unext-text').removeClass('hide')
-      unexpanded.find('.unext-text').addClass('show');
+      $('.popup')
+        .removeClass('show');
+      $('.popup')
+        .addClass('hide');
+      unexpanded
+        .find('.unext-text')
+        .removeClass('hide')
+      unexpanded
+        .find('.unext-text')
+        .addClass('show');
     }).mouseleave(function() {
-      unexpanded.find('.unext-text').removeClass('show')
-      unexpanded.find('.unext-text').addClass('hide')
+      unexpanded
+        .find('.unext-text')
+        .removeClass('show')
+      unexpanded
+        .find('.unext-text')
+        .addClass('hide')
     });
 
     ToggleChatWindow =  () => {
@@ -583,9 +665,15 @@ let content =
     }
 
     ShowChatInitiationDisplay = () => {
-      expanded.find('.login').addClass('hide');
-      expanded.find('.chat').removeClass('hide');
-      expanded.find('.chat').addClass('show');
+      expanded
+        .find('.login')
+        .addClass('hide');
+      expanded
+        .find('.waiting')
+        .addClass('show')
+      expanded
+        .find('.waiting')
+        .removeClass('hide')
     }
 
     ShowAppropriateChatDisplay = () => {
@@ -599,7 +687,8 @@ let content =
         .val()
         .trim()
       if (name.length < 1) {
-        $('.error').addClass('show');
+        $('.error')
+        .addClass('show');
       } else {
         ShowAppropriateChatDisplay();
         socketOn();
@@ -613,8 +702,12 @@ let content =
     }
 
     ShowChatRoomDisplay = () => {
-      expanded.find('.login').addClass('hide');
-      expanded.find('.chat').addClass('show');
+      expanded
+        .find('.login')
+        .addClass('hide');
+      expanded
+        .find('.chat')
+        .addClass('show');
 
       // const chatManager = new Chatkit.ChatManager({
       //   userId: chat.userId,
@@ -672,21 +765,27 @@ let content =
         </div>
       </li>`
       );
-      let myDiv = $(".append").get(0);
-      $(".append").scrollTop(myDiv.scrollHeight);
+      let myDiv = $(".append")
+        .get(0);
+      $(".append")
+        .scrollTop(myDiv.scrollHeight);
       play();
     }
 
     NewChatMessage = (message) => {
-      chatBox.find('.messages').find('.append').append(
+      chatBox
+        .find('.messages')
+        .find('.append')
+        .append(
         `<li class="sent">
         <div class="sent-message">
             <p class="message-text">${message}</p>
         </div>
         </li>`
-      );
+        );
       let myDiv = $(".append").get(0);
-      $(".append").scrollTop(myDiv.scrollHeight);
+      $(".append")
+        .scrollTop(myDiv.scrollHeight);
       // if (chat.messages[message.id] === undefined) {
       //   const messageClass =
       //     message.sender.id !== chat.userId ? 'support' : 'user';
@@ -712,7 +811,12 @@ let content =
         .val()
         .trim();
       NewChatMessage(message);
-      var json = JSON.stringify(message);
+      var json = JSON.stringify({
+        TYPE: "MESSAGE",
+        author: "giorgi",
+        body: message
+      });
+      console.log(json);
       socket.send(json);
 
       // chat.currentUser.sendMessage(
@@ -729,9 +833,14 @@ let content =
     }
     
     Constructor();
-    unexpanded.on('click', ToggleChatWindow);
-    $('.close-icon').on('click', ToggleChatWindow);
-    $('.fold-icon').on('click', ToggleChatWindow);
-    loginBtn.on('click', loginChat);
-    sendBtn.on('click', SendMessageToSupport);
+    unexpanded
+      .on('click', ToggleChatWindow);
+    $('.close-icon')
+      .on('click', ToggleChatWindow);
+    $('.fold-icon')
+      .on('click', ToggleChatWindow);
+    loginBtn
+      .on('click', loginChat);
+    sendBtn
+      .on('click', SendMessageToSupport);
 })();

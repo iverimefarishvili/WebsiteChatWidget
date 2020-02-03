@@ -40,10 +40,13 @@
                 </div>
             </div>
             <div class="login">
-                <label class="label" for="login-name">შეიყვანეთ სახელი</label>
-                <input type="text" name="login-name" class="login-name" id="login-name" required>
-                <span class="error">გთხოვთ შეიყვანოთ სახელი</span>
-                <button type="submit" class="login-btn">ჩატის დაწყება</button>
+                    <label class="label" for="login-name">შეიყვანეთ სახელი</label>
+                    <input type="text" name="login-name" class="login-name" id="login-name" required>
+                    <span class="error">გთხოვთ შეიყვანოთ სახელი</span>
+                    <button type="submit" class="login-btn">ჩატის დაწყება</button>
+            </div>
+            <div class="waiting hide">
+                <p>გთხოვთ დაელოდოთ, ოპერატორი მალე გიპასუხებთ</p>
             </div>
             <div class="chat hide">
                 <div class="loader-wrapper">
@@ -52,7 +55,6 @@
                     </div> -->
                   </div>
                 <div class="messages">
-                    
                     <ul class="append">
                         <li class="received">
                             <div class="received-message">
@@ -92,8 +94,12 @@
                                 
                             </div>
                         </li>
+                        <div id='typing-indicator hide'>
+                            <span class='typing-dot'></span>
+                            <span class='typing-dot'></span>
+                            <span class='typing-dot'></span>
+                        </div>
                     </ul>
-                    
                 </div>
 
                 <div class="input">
